@@ -287,114 +287,61 @@
         min-height: 700px;
         display: flex;
         align-items: center;
+        justify-content: center;
         overflow: hidden;
       }
-      .hero-bg {
+      /* YouTube video background */
+      .hero-video-wrapper {
         position: absolute;
         inset: 0;
-        background: linear-gradient(
-          135deg,
-          #042855 0%,
-          #0e2a4a 40%,
-          #174f70 70%,
-          #5fa4a1 100%
-        );
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
       }
-      .hero-orb {
+      .hero-video-wrapper iframe {
         position: absolute;
-        right: -80px;
         top: 50%;
-        transform: translateY(-50%);
-        width: 680px;
-        height: 680px;
-        border-radius: 50%;
-        background: radial-gradient(
-          circle at 40% 40%,
-          rgba(95, 164, 161, 0.25),
-          rgba(23, 79, 112, 0.08),
-          transparent 70%
-        );
-        border: 1px solid rgba(95, 164, 161, 0.12);
+        left: 50%;
+        /* Cover the section regardless of viewport ratio */
+        width: 177.78vh; /* 16/9 × 100vh */
+        height: 100vh;
+        min-width: 100%;
+        min-height: 56.25vw; /* 9/16 × 100vw */
+        transform: translate(-50%, -50%);
+        border: 0;
       }
-      .hero-orb::before {
-        content: "";
+      /* Dark overlay on top of the video */
+      .hero-overlay {
         position: absolute;
-        inset: 40px;
-        border-radius: 50%;
-        border: 1px solid rgba(95, 164, 161, 0.08);
-      }
-      .hero-orb::after {
-        content: "";
-        position: absolute;
-        inset: 100px;
-        border-radius: 50%;
-        border: 1px solid rgba(95, 164, 161, 0.05);
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 1;
       }
       .hero-content {
         position: relative;
         z-index: 2;
-        padding: 0 80px;
-        max-width: 720px;
+        text-align: center;
+        padding: 0 40px;
+        max-width: 900px;
       }
       .hero-eyebrow {
-        font-size: 11px;
-        letter-spacing: 4px;
+        font-size: 13px;
+        letter-spacing: 5px;
         text-transform: uppercase;
-        color: var(--cc-light);
-        margin-bottom: 24px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      .hero-eyebrow::before {
-        content: "";
-        display: block;
-        width: 32px;
-        height: 1px;
-        background: var(--cc-light);
+        color: rgba(255, 255, 255, 0.85);
+        margin-bottom: 28px;
+        font-weight: 400;
+        font-family: var(--font-primary);
       }
       .hero-title {
         font-family: var(--font-secondary);
-        font-size: 68px;
+        font-size: 72px;
         line-height: 1.05;
-        color: var(--porcelain);
-        margin-bottom: 28px;
+        color: #fff;
+        margin-bottom: 0;
         font-weight: 400;
-      }
-      .hero-title em {
-        font-style: italic;
-        background: linear-gradient(to right, #5fa4a1, #a8d5d3);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      .hero-body {
-        font-size: 17px;
-        line-height: 1.75;
-        color: rgba(251, 250, 249, 0.72);
-        margin-bottom: 40px;
-        max-width: 500px;
-      }
-      .hero-actions {
-        display: flex;
-        gap: 16px;
-        flex-wrap: wrap;
-      }
-      .hero-btn-out {
-        border: 1px solid rgba(251, 250, 249, 0.35);
-        color: var(--porcelain);
-        font-family: var(--font-primary);
-        font-size: 12px;
-        font-weight: 500;
         letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 15px 36px;
-        border-radius: 2px;
-        display: inline-block;
-        transition: background 0.2s;
-      }
-      .hero-btn-out:hover {
-        background: rgba(251, 250, 249, 0.1);
       }
       .hero-scroll {
         position: absolute;
@@ -405,17 +352,18 @@
         flex-direction: column;
         align-items: center;
         gap: 8px;
-        color: rgba(251, 250, 249, 0.35);
+        color: rgba(255, 255, 255, 0.45);
         font-size: 10px;
         letter-spacing: 2px;
         text-transform: uppercase;
+        z-index: 2;
       }
       .hero-scroll-line {
         width: 1px;
         height: 48px;
         background: linear-gradient(
           to bottom,
-          rgba(251, 250, 249, 0.35),
+          rgba(255, 255, 255, 0.45),
           transparent
         );
       }
@@ -1671,26 +1619,23 @@
     <!-- ========== HOME ========== -->
     <div class="page active" id="page-home">
       <section class="hero">
-        <div class="hero-bg"></div>
-        <div class="hero-orb"></div>
+        <!-- YouTube video background -->
+        <div class="hero-video-wrapper">
+          <iframe
+            id="hero-bg-video"
+            data-video-id="kNQb3dGVAak"
+            src="about:blank"
+            title="Harmonic Egg background video"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <!-- Dark overlay -->
+        <div class="hero-overlay"></div>
+        <!-- Centered text -->
         <div class="hero-content">
-          <div class="hero-eyebrow">Sound &amp; Light Therapy</div>
-          <h1 class="hero-title">
-            Restore Your Body's<br /><em>Natural Balance</em>
-          </h1>
-          <p class="hero-body">
-            The Harmonic Egg&#174; is a patented, immersive energy therapy
-            chamber using sound, light, frequency, and vibration — activating
-            your body's innate ability to heal itself.
-          </p>
-          <div class="hero-actions">
-            <a class="btn-primary" href="#" onclick="showPage('sessions')"
-              >Find a Session</a
-            >
-            <a class="hero-btn-out" href="#" onclick="showPage('science')"
-              >The Science</a
-            >
-          </div>
+          <div class="hero-eyebrow">Advanced Immersive Egg-sperience</div>
+          <h1 class="hero-title">Wellness From Within</h1>
         </div>
         <div class="hero-scroll">
           <div class="hero-scroll-line"></div>
@@ -3236,6 +3181,40 @@
         });
         btn.classList.add("active");
       }
+      function initHeroVideo() {
+        var frame = document.getElementById("hero-bg-video");
+        if (!frame) return;
+
+        var videoId = frame.getAttribute("data-video-id") || "kNQb3dGVAak";
+        var params = new URLSearchParams({
+          autoplay: "1",
+          mute: "1",
+          loop: "1",
+          playlist: videoId,
+          controls: "0",
+          rel: "0",
+          playsinline: "1",
+          cc_load_policy: "0",
+          modestbranding: "1",
+          iv_load_policy: "3",
+        });
+
+        // Add origin only for http(s) environments (e.g. Vercel deploys).
+        if (
+          window.location.protocol === "http:" ||
+          window.location.protocol === "https:"
+        ) {
+          params.set("enablejsapi", "1");
+          params.set("origin", window.location.origin);
+        }
+
+        frame.src =
+          "https://www.youtube-nocookie.com/embed/" +
+          videoId +
+          "?" +
+          params.toString();
+      }
+      initHeroVideo();
       document.addEventListener("click", function (e) {
         var menu = document.getElementById("mobile-menu");
         var hb = document.getElementById("hamburger");
