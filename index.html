@@ -1,440 +1,879 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harmonic Egg Store</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harmonic Egg® Wellness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --onyx: #0E0F11;
+      --porcelain: #FBFAF9;
+      --stone: #D7D0C5;
+      --cc-light: #5FA4A1;
+      --cc-dark: #174F70;
+      --ds-navy: #042855;
+      --ds-violet: #8C52FF;
+      --ss-pink: #CB6CE6;
+      --ss-purple: #921B9F;
+      --grad-celestial: linear-gradient(135deg, #5FA4A1, #174F70);
+      --grad-sacred: linear-gradient(135deg, #CB6CE6, #921B9F);
+      --grad-deep: linear-gradient(135deg, #042855, #8C52FF);
+      --font-primary: 'Roboto', sans-serif;
+      --font-secondary: 'Playfair Display', serif;
+      --nav-h: 80px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-primary); background: var(--porcelain); color: var(--onyx); font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    .page { display: none; }
+    .page.active { display: block; }
 
-body {
-  font-family: 'Georgia', serif;
-  background-color: #f5f2ee;
-  color: #1e3a4a;
-  min-height: 100vh;
-  position: relative;
-}
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: var(--nav-h); background: rgba(251,250,249,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(215,208,197,0.4); display: flex; align-items: center; padding: 0 40px; transition: box-shadow 0.3s; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1280px; margin: 0 auto; }
+    .nav-logo { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .nav-logo svg { width: 42px; height: 42px; }
+    .nav-logo-text { font-family: var(--font-primary); font-weight: 700; font-size: 15px; letter-spacing: 2px; text-transform: uppercase; color: var(--ds-navy); line-height: 1.2; }
+    .nav-logo-text span { display: block; font-weight: 300; font-size: 11px; letter-spacing: 3px; color: var(--cc-light); }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 13px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--onyx); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--cc-light); }
+    .nav-cta { background: var(--grad-celestial); color: #fff !important; padding: 10px 24px; border-radius: 2px; font-size: 12px; letter-spacing: 2px; transition: opacity 0.2s; }
+    .nav-cta:hover { opacity: 0.88; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .nav-hamburger span { display: block; width: 26px; height: 2px; background: var(--onyx); }
+    .mobile-menu { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--porcelain); padding: 24px 40px; border-bottom: 1px solid var(--stone); z-index: 999; flex-direction: column; gap: 0; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: 14px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--onyx); padding: 14px 0; border-bottom: 1px solid rgba(215,208,197,0.5); }
+    .mobile-menu a:last-child { border-bottom: none; }
 
-/* Watercolor speckle background — SVG data URI, no external fetch */
-.watercolor-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  background:
-    radial-gradient(ellipse 55% 40% at 10% 20%, rgba(200,180,230,0.35) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 35% at 85% 15%, rgba(160,210,200,0.28) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 45% at 70% 75%, rgba(210,190,240,0.22) 0%, transparent 70%),
-    radial-gradient(ellipse 35% 30% at 20% 80%, rgba(180,220,210,0.2) 0%, transparent 60%),
-    radial-gradient(ellipse 25% 20% at 50% 50%, rgba(220,200,245,0.12) 0%, transparent 60%),
-    #f0eee8;
-}
+    /* SHARED */
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    .section-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--cc-light); font-weight: 500; margin-bottom: 12px; }
+    .section-title { font-family: var(--font-secondary); font-size: 42px; color: var(--ds-navy); line-height: 1.15; margin-bottom: 16px; }
+    .section-subtitle { font-size: 17px; color: #555; max-width: 560px; line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--grad-celestial); color: #fff; font-family: var(--font-primary); font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; padding: 16px 36px; border-radius: 2px; transition: opacity 0.2s, transform 0.2s; }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); color: #fff; }
+    .btn-secondary { display: inline-block; border: 1px solid var(--ds-navy); color: var(--ds-navy); font-family: var(--font-primary); font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; padding: 15px 36px; border-radius: 2px; transition: background 0.2s, color 0.2s; }
+    .btn-secondary:hover { background: var(--ds-navy); color: #fff; }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; letter-spacing: 1px; color: var(--cc-dark); transition: gap 0.2s; }
+    .btn-ghost:hover { gap: 14px; }
+    .btn-ghost::after { content: '→'; }
+    .divider { height: 1px; background: linear-gradient(to right, transparent, var(--stone), transparent); }
 
-/* Speckle dots via box-shadow trick */
-.speckles {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.speckles::before {
-  content: '';
-  position: absolute;
-  width: 4px; height: 4px;
-  border-radius: 50%;
-  background: rgba(160,130,200,0.4);
-  box-shadow:
-    80px 120px 0 1px rgba(160,130,200,0.3),
-    200px 60px 0 2px rgba(130,190,180,0.25),
-    340px 200px 0 1px rgba(180,150,220,0.35),
-    500px 80px 0 2px rgba(120,180,170,0.2),
-    650px 300px 0 1px rgba(200,170,230,0.3),
-    780px 140px 0 2px rgba(150,200,190,0.25),
-    920px 220px 0 1px rgba(170,140,210,0.3),
-    1050px 50px 0 2px rgba(130,190,175,0.2),
-    1180px 310px 0 1px rgba(190,160,225,0.28),
-    60px 380px 0 2px rgba(155,195,185,0.22),
-    250px 450px 0 1px rgba(175,145,215,0.3),
-    430px 500px 0 2px rgba(140,185,175,0.2),
-    620px 420px 0 1px rgba(185,155,225,0.28),
-    820px 480px 0 2px rgba(145,190,180,0.22),
-    980px 550px 0 1px rgba(165,135,205,0.3),
-    1100px 400px 0 2px rgba(135,185,172,0.2),
-    300px 620px 0 1px rgba(190,158,228,0.25),
-    700px 680px 0 2px rgba(150,192,182,0.2),
-    900px 720px 0 1px rgba(172,142,212,0.28),
-    120px 700px 0 2px rgba(142,187,177,0.22);
-}
+    /* HERO */
+    .hero { position: relative; height: 100vh; min-height: 700px; display: flex; align-items: center; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #042855 0%, #0e2a4a 40%, #174F70 70%, #5FA4A1 100%); }
+    .hero-orb { position: absolute; right: -80px; top: 50%; transform: translateY(-50%); width: 680px; height: 680px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, rgba(95,164,161,0.25), rgba(23,79,112,0.08), transparent 70%); border: 1px solid rgba(95,164,161,0.12); }
+    .hero-orb::before { content: ''; position: absolute; inset: 40px; border-radius: 50%; border: 1px solid rgba(95,164,161,0.08); }
+    .hero-orb::after { content: ''; position: absolute; inset: 100px; border-radius: 50%; border: 1px solid rgba(95,164,161,0.05); }
+    .hero-content { position: relative; z-index: 2; padding: 0 80px; max-width: 720px; }
+    .hero-eyebrow { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--cc-light); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+    .hero-eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--cc-light); }
+    .hero-title { font-family: var(--font-secondary); font-size: 68px; line-height: 1.05; color: var(--porcelain); margin-bottom: 28px; font-weight: 400; }
+    .hero-title em { font-style: italic; background: linear-gradient(to right, #5FA4A1, #a8d5d3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-body { font-size: 17px; line-height: 1.75; color: rgba(251,250,249,0.72); margin-bottom: 40px; max-width: 500px; }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-btn-out { border: 1px solid rgba(251,250,249,0.35); color: var(--porcelain); font-family: var(--font-primary); font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; padding: 15px 36px; border-radius: 2px; display: inline-block; transition: background 0.2s; }
+    .hero-btn-out:hover { background: rgba(251,250,249,0.1); }
+    .hero-scroll { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(251,250,249,0.35); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+    .hero-scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, rgba(251,250,249,0.35), transparent); }
 
-/* All content above bg */
-.page-content {
-  position: relative;
-  z-index: 1;
-}
+    /* STATS BAR */
+    .stats-bar { background: var(--porcelain); border-bottom: 1px solid rgba(215,208,197,0.5); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 1280px; margin: 0 auto; padding: 40px 40px; }
+    .stat-item { text-align: center; padding: 0 24px; border-right: 1px solid var(--stone); }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-family: var(--font-secondary); font-size: 44px; color: var(--ds-navy); line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--cc-light); }
 
-/* NAV */
-nav {
-  padding: 20px 48px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.nav-logo svg { width: 32px; height: 36px; }
-.nav-logo-text {
-  font-size: 11px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: #1e3a4a;
-  font-family: sans-serif;
-  font-weight: 600;
-}
-.nav-links {
-  display: flex;
-  gap: 32px;
-  list-style: none;
-}
-.nav-links a {
-  color: #3a6070;
-  text-decoration: none;
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-family: sans-serif;
-}
-.nav-cart {
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #3a7a6a;
-  font-family: sans-serif;
-  text-decoration: none;
-}
+    /* WHAT IS */
+    .what-is { padding: 120px 0; }
+    .what-is-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; max-width: 1280px; margin: 0 auto; padding: 0 40px; }
 
-/* HERO */
-.hero {
-  text-align: center;
-  padding: 56px 40px 48px;
-}
-.hero-eyebrow {
-  font-size: 10px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: #3a7a6a;
-  font-family: sans-serif;
-  margin-bottom: 20px;
-}
-.hero h1 {
-  font-size: 32px;
-  font-weight: normal;
-  color: #1e3a4a;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  line-height: 1.25;
-  margin-bottom: 18px;
-}
-.hero p {
-  font-size: 15px;
-  color: #3a6070;
-  line-height: 1.8;
-  font-family: sans-serif;
-  font-style: italic;
-  margin-bottom: 0;
-}
+    /* HOW IT WORKS */
+    .how-it-works { padding: 120px 0; background: var(--onyx); }
+    .how-header { text-align: center; max-width: 600px; margin: 0 auto 80px; }
+    .how-header .section-title { color: var(--porcelain); }
+    .how-header .section-subtitle { color: rgba(251,250,249,0.6); max-width: 100%; }
+    .how-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    .how-step { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 48px 40px; transition: background 0.2s; }
+    .how-step:hover { background: rgba(95,164,161,0.06); }
+    .step-num { font-family: var(--font-secondary); font-size: 80px; color: rgba(95,164,161,0.12); line-height: 1; margin-bottom: 24px; }
+    .step-icon { width: 48px; height: 48px; background: var(--grad-celestial); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+    .step-title { font-family: var(--font-primary); font-size: 16px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--porcelain); margin-bottom: 12px; }
+    .step-body { font-size: 14px; color: rgba(251,250,249,0.55); line-height: 1.8; }
 
-/* SECTION LABEL */
-.section-header {
-  text-align: center;
-  padding: 40px 40px 8px;
-}
-.section-header h2 {
-  font-size: 10px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: #3a7a6a;
-  font-family: sans-serif;
-  font-weight: normal;
-}
-.section-divider {
-  width: 40px;
-  height: 1px;
-  background: #3a7a6a;
-  margin: 12px auto 0;
-  opacity: 0.4;
-}
+    /* TESTIMONIALS */
+    .testimonials { padding: 120px 0; background: var(--porcelain); }
+    .testimonials-header { text-align: center; margin-bottom: 64px; }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    .testimonial-card { background: #fff; border: 1px solid rgba(215,208,197,0.6); padding: 40px; position: relative; }
+    .testimonial-card::before { content: '\201C'; font-family: var(--font-secondary); font-size: 96px; color: var(--stone); position: absolute; top: 10px; left: 28px; line-height: 1; }
+    .testimonial-text { font-family: var(--font-secondary); font-size: 17px; font-style: italic; color: var(--ds-navy); line-height: 1.7; margin-bottom: 28px; padding-top: 32px; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--grad-celestial); display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; font-weight: 600; flex-shrink: 0; }
+    .author-name { font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--onyx); }
+    .author-loc { font-size: 12px; color: var(--cc-light); }
 
-/* PRODUCT GRID */
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-  padding: 28px 48px 64px;
-  max-width: 900px;
-  margin: 0 auto;
-}
+    /* PRODUCT CARD */
+    .product-card { background: #fff; border: 1px solid rgba(215,208,197,0.5); border-radius: 4px; overflow: hidden; transition: box-shadow 0.25s, transform 0.25s; }
+    .product-card:hover { box-shadow: 0 12px 40px rgba(4,40,85,0.1); transform: translateY(-4px); }
+    .product-img { aspect-ratio: 1 / 1.1; background: linear-gradient(135deg, rgba(95,164,161,0.12), rgba(215,208,197,0.18)); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .product-img-placeholder { font-size: 52px; opacity: 0.35; }
+    .product-badge { position: absolute; top: 12px; left: 12px; background: var(--grad-sacred); color: #fff; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; }
+    .product-body { padding: 20px 20px 24px; }
+    .product-cat { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--cc-light); margin-bottom: 6px; }
+    .product-name { font-size: 15px; font-weight: 500; color: var(--onyx); margin-bottom: 8px; line-height: 1.3; }
+    .product-price { font-size: 17px; font-weight: 700; color: var(--ds-navy); margin-bottom: 16px; }
+    .product-add { width: 100%; background: var(--grad-celestial); color: #fff; font-family: var(--font-primary); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; padding: 12px; border-radius: 2px; transition: opacity 0.2s; }
+    .product-add:hover { opacity: 0.85; }
 
-.product-card {
-  background: rgba(255,255,255,0.72);
-  border: 1px solid rgba(160,180,175,0.35);
-  border-radius: 12px;
-  overflow: hidden;
-  backdrop-filter: blur(6px);
-}
+    /* FEATURED PRODUCTS */
+    .featured-products { padding: 100px 0; }
+    .fp-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; max-width: 1280px; margin-left: auto; margin-right: auto; padding: 0 40px; }
+    .fp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 1280px; margin: 0 auto; padding: 0 40px; }
 
-.product-img-placeholder {
-  width: 100%;
-  height: 210px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(200,215,210,0.2);
-  border-bottom: 1px solid rgba(160,180,175,0.25);
-}
+    /* CTA SECTION */
+    .cta-section { padding: 120px 40px; background: var(--grad-deep); text-align: center; }
+    .cta-section .section-label { color: rgba(140,82,255,0.8); }
+    .cta-section .section-title { color: var(--porcelain); margin: 0 auto 20px; max-width: 640px; }
+    .cta-section .section-subtitle { color: rgba(251,250,249,0.65); margin: 0 auto 48px; }
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .cta-section .btn-primary { background: var(--grad-sacred); }
+    .cta-section .btn-secondary { border-color: rgba(251,250,249,0.4); color: var(--porcelain); }
+    .cta-section .btn-secondary:hover { background: rgba(251,250,249,0.1); color: var(--porcelain); }
 
-.product-info {
-  padding: 20px 22px 22px;
-}
-.product-category {
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: #3a7a6a;
-  font-family: sans-serif;
-  margin-bottom: 8px;
-}
-.product-name {
-  font-size: 17px;
-  color: #1e3a4a;
-  margin-bottom: 8px;
-  line-height: 1.35;
-}
-.product-desc {
-  font-size: 12px;
-  color: #5a7a88;
-  font-family: sans-serif;
-  line-height: 1.65;
-  margin-bottom: 20px;
-}
-.product-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.product-price {
-  font-size: 20px;
-  color: #1e3a4a;
-  font-family: sans-serif;
-}
-.btn-add {
-  background: #3a7a6a;
-  border: none;
-  color: #fff;
-  padding: 9px 20px;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-family: sans-serif;
-  border-radius: 40px;
-}
+    /* PAGE HERO */
+    .page-hero { padding-top: calc(var(--nav-h) + 100px); padding-bottom: 100px; background: linear-gradient(160deg, #042855 0%, #174F70 60%, #5FA4A1 100%); text-align: center; padding-left: 40px; padding-right: 40px; }
+    .page-hero-eyebrow { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: rgba(95,164,161,0.9); margin-bottom: 20px; }
+    .page-hero-title { font-family: var(--font-secondary); font-size: 56px; color: var(--porcelain); max-width: 700px; margin: 0 auto 24px; line-height: 1.1; }
+    .page-hero-body { font-size: 17px; color: rgba(251,250,249,0.7); max-width: 560px; margin: 0 auto; line-height: 1.75; }
 
-/* TRUST BAR */
-.trust-bar {
-  padding: 28px 48px;
-  display: flex;
-  justify-content: center;
-  gap: 56px;
-  flex-wrap: wrap;
-  background: rgba(255,255,255,0.4);
-  border-top: 1px solid rgba(160,180,175,0.3);
-  border-bottom: 1px solid rgba(160,180,175,0.3);
-}
-.trust-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.trust-dot {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #3a7a6a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.trust-dot svg { width: 9px; height: 9px; }
-.trust-item p {
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: #3a6070;
-  font-family: sans-serif;
-}
+    /* ABOUT */
+    .about-mission { padding: 120px 0; }
+    .about-mission-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    .mission-visual { aspect-ratio: 4/5; background: linear-gradient(135deg, rgba(95,164,161,0.1), rgba(23,79,112,0.15)); border: 1px solid var(--stone); display: flex; align-items: center; justify-content: center; font-size: 64px; color: var(--cc-light); opacity: 0.5; }
+    .values-section { padding: 100px 0; background: var(--onyx); }
+    .values-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.05); max-width: 1280px; margin: 80px auto 0; padding: 0 40px; }
+    .value-card { background: var(--onyx); padding: 48px 32px; border: 1px solid rgba(255,255,255,0.05); }
+    .value-icon { width: 56px; height: 3px; background: var(--grad-celestial); margin-bottom: 28px; }
+    .value-title { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--porcelain); margin-bottom: 16px; font-weight: 700; }
+    .value-body { font-size: 14px; color: rgba(251,250,249,0.5); line-height: 1.8; }
+    .founder-section { padding: 120px 0; }
+    .founder-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; display: grid; grid-template-columns: 400px 1fr; gap: 80px; align-items: start; }
+    .founder-img { aspect-ratio: 3/4; background: linear-gradient(135deg, rgba(95,164,161,0.15), rgba(23,79,112,0.2)); border: 1px solid var(--stone); display: flex; align-items: center; justify-content: center; font-size: 80px; color: rgba(95,164,161,0.3); }
+    .founder-name { font-family: var(--font-secondary); font-size: 36px; color: var(--ds-navy); margin-bottom: 6px; }
+    .founder-title-text { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--cc-light); margin-bottom: 28px; }
+    .founder-bio { font-size: 16px; line-height: 1.8; color: #444; }
+    .founder-bio p + p { margin-top: 16px; }
+    .founder-quote { margin-top: 36px; padding: 28px 32px; border-left: 3px solid var(--cc-light); background: rgba(95,164,161,0.05); }
+    .founder-quote p { font-family: var(--font-secondary); font-size: 20px; font-style: italic; color: var(--ds-navy); line-height: 1.5; }
 
-/* FOOTER */
-footer {
-  padding: 28px 48px;
-  text-align: center;
-}
-footer p {
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #8aada8;
-  font-family: sans-serif;
-}
+    /* SCIENCE */
+    .science-intro { padding: 100px 0; }
+    .science-intro-inner { max-width: 760px; margin: 0 auto; padding: 0 40px; text-align: center; }
+    .pillars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; max-width: 1280px; margin: 0 auto; padding: 0 40px 100px; }
+    .pillar-card { padding: 64px 56px; border: 1px solid rgba(215,208,197,0.5); background: #fff; }
+    .pillar-num { font-family: var(--font-secondary); font-size: 64px; color: rgba(95,164,161,0.15); line-height: 1; margin-bottom: 16px; }
+    .pillar-title { font-family: var(--font-primary); font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--ds-navy); margin-bottom: 16px; }
+    .pillar-body { font-size: 15px; color: #555; line-height: 1.8; }
+    .science-geometry { padding: 100px 0; background: var(--ds-navy); text-align: center; }
+    .science-geometry .section-title { color: var(--porcelain); max-width: 640px; margin: 0 auto 20px; }
+    .science-geometry .section-subtitle { color: rgba(251,250,249,0.6); max-width: 560px; margin: 0 auto 60px; }
+    .geometry-visual { width: 300px; height: 300px; margin: 0 auto 60px; }
 
-/* ANNOTATION TAGS */
-.ann-wrap { position: relative; }
-.ann-tag {
-  display: inline-block;
-  background: #2a6fff;
-  color: #fff;
-  font-size: 10px;
-  font-family: sans-serif;
-  padding: 3px 9px;
-  border-radius: 4px;
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 20;
-  opacity: 0.88;
-  letter-spacing: 0;
-  text-transform: none;
-}
-</style>
+    /* SESSIONS */
+    .sessions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    .session-card { border: 1px solid rgba(215,208,197,0.6); padding: 48px 36px; background: #fff; position: relative; overflow: hidden; }
+    .session-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-celestial); }
+    .session-card.featured::after { background: var(--grad-sacred); }
+    .session-card.featured { border-color: rgba(203,108,230,0.25); }
+    .session-badge { display: inline-block; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--ss-purple); background: rgba(203,108,230,0.08); padding: 4px 10px; border-radius: 2px; margin-bottom: 20px; }
+    .session-name { font-family: var(--font-secondary); font-size: 26px; color: var(--ds-navy); margin-bottom: 12px; }
+    .session-desc { font-size: 14px; color: #666; line-height: 1.75; margin-bottom: 28px; }
+    .session-duration { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--cc-light); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px; }
+    .find-center { padding: 100px 0; background: var(--porcelain); }
+    .find-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; }
+    .center-map-placeholder { height: 400px; background: linear-gradient(135deg, rgba(95,164,161,0.08), rgba(23,79,112,0.08)); border: 1px solid var(--stone); display: flex; align-items: center; justify-content: center; color: var(--cc-light); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; }
+
+    /* SHOP */
+    .shop-filters { padding: 24px 0; border-bottom: 1px solid var(--stone); background: #fff; position: sticky; top: var(--nav-h); z-index: 100; }
+    .shop-filters-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .filter-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #888; margin-right: 8px; }
+    .filter-btn { font-family: var(--font-primary); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 18px; border: 1px solid var(--stone); border-radius: 2px; color: var(--onyx); background: transparent; transition: all 0.2s; cursor: pointer; }
+    .filter-btn.active, .filter-btn:hover { background: var(--ds-navy); border-color: var(--ds-navy); color: #fff; }
+    .shop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1280px; margin: 0 auto; padding: 64px 40px; }
+    .wholesale-gate { padding: 80px 40px; background: linear-gradient(135deg, rgba(4,40,85,0.04), rgba(140,82,255,0.06)); border: 1px solid rgba(140,82,255,0.18); max-width: 1280px; margin: 0 auto 80px; text-align: center; }
+    .wholesale-gate .section-title { color: var(--ds-navy); margin-bottom: 16px; }
+    .wholesale-gate .section-subtitle { margin: 0 auto 36px; }
+    .wholesale-lock { width: 56px; height: 56px; margin: 0 auto 28px; background: var(--grad-deep); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+    /* TESTIMONIALS PAGE */
+    .testimonials-page-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 1280px; margin: 0 auto; padding: 64px 40px 80px; }
+    .testimonial-page-card { background: #fff; border: 1px solid rgba(215,208,197,0.6); padding: 48px; position: relative; }
+    .testimonial-page-card::before { content: '\201C'; font-family: var(--font-secondary); font-size: 120px; color: var(--stone); position: absolute; top: 10px; left: 36px; line-height: 1; }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    .form-label { display: block; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--ds-navy); margin-bottom: 8px; font-weight: 500; }
+    .form-input, .form-textarea { width: 100%; border: 1px solid var(--stone); background: #fff; font-family: var(--font-primary); font-size: 15px; color: var(--onyx); padding: 14px 16px; border-radius: 2px; outline: none; transition: border-color 0.2s; }
+    .form-input:focus, .form-textarea:focus { border-color: var(--cc-light); }
+    .form-textarea { min-height: 140px; resize: vertical; }
+
+    /* MEDIA */
+    .media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1280px; margin: 0 auto; padding: 64px 40px 120px; }
+    .media-card { background: #fff; border: 1px solid rgba(215,208,197,0.5); overflow: hidden; }
+    .media-thumb { aspect-ratio: 16/9; background: linear-gradient(135deg, rgba(4,40,85,0.85), rgba(23,79,112,0.9)); display: flex; align-items: center; justify-content: center; position: relative; }
+    .media-play { width: 56px; height: 56px; border: 2px solid rgba(255,255,255,0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; padding-left: 4px; }
+    .media-type-badge { position: absolute; top: 12px; right: 12px; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; background: rgba(0,0,0,0.35); padding: 4px 8px; border-radius: 2px; }
+    .media-info { padding: 24px; }
+    .media-source { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--cc-light); margin-bottom: 8px; }
+    .media-title { font-size: 16px; font-weight: 500; color: var(--onyx); margin-bottom: 6px; line-height: 1.35; }
+    .media-date { font-size: 12px; color: #999; }
+
+    /* FOOTER */
+    footer { background: var(--onyx); color: rgba(251,250,249,0.7); padding: 80px 40px 40px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 64px; }
+    .footer-brand-text { font-size: 13px; line-height: 1.8; margin-top: 16px; margin-bottom: 24px; color: rgba(251,250,249,0.55); }
+    .footer-social { display: flex; gap: 16px; }
+    .footer-social a { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.18); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: rgba(251,250,249,0.6); transition: border-color 0.2s, background 0.2s; }
+    .footer-social a:hover { border-color: var(--cc-light); background: rgba(95,164,161,0.1); color: var(--cc-light); }
+    .footer-col h4 { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--porcelain); margin-bottom: 20px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul li a { font-size: 13px; color: rgba(251,250,249,0.55); transition: color 0.2s; }
+    .footer-col ul li a:hover { color: var(--cc-light); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: rgba(251,250,249,0.35); }
+    .footer-bottom a { color: rgba(251,250,249,0.35); transition: color 0.2s; }
+    .footer-bottom a:hover { color: var(--cc-light); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .hero-title { font-size: 52px; }
+      .what-is-inner, .about-mission-inner { grid-template-columns: 1fr; gap: 60px; }
+      .founder-inner { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .fp-grid { grid-template-columns: repeat(2, 1fr); }
+      .pillars-grid { padding: 0 40px 80px; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .hero-content { padding: 0 24px; }
+      .hero-title { font-size: 40px; }
+      .hero-body { font-size: 15px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); padding: 0 24px; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--stone); padding: 24px 0; }
+      .stat-item:nth-child(odd) { border-right: 1px solid var(--stone); }
+      .stat-item:last-child { border-bottom: none; }
+      .stat-item:nth-child(3) { border-bottom: none; }
+      .section-title { font-size: 32px; }
+      .page-hero-title { font-size: 36px; }
+      .how-steps, .sessions-grid, .testimonials-grid, .media-grid { grid-template-columns: 1fr; padding: 0 24px; }
+      .testimonials-page-grid, .shop-grid, .fp-grid, .pillars-grid { grid-template-columns: 1fr; padding: 0 24px; }
+      .values-grid { grid-template-columns: 1fr 1fr; padding: 0 24px; }
+      .what-is-inner, .about-mission-inner, .founder-inner { padding: 0 24px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      footer { padding: 60px 24px 32px; }
+      .page-hero { padding-top: calc(var(--nav-h) + 60px); padding-bottom: 60px; padding-left: 24px; padding-right: 24px; }
+      .cta-section { padding: 80px 24px; }
+      .find-header { flex-direction: column; gap: 20px; align-items: flex-start; }
+      .find-header > div:last-child { width: 100%; }
+      .find-header .form-input { width: 100%; }
+      .find-header > div:last-child { display: flex; flex-direction: column; gap: 12px; }
+      .shop-filters-inner { padding: 0 24px; }
+      .fp-header { padding: 0 24px; flex-direction: column; gap: 16px; align-items: flex-start; }
+      .wholesale-gate { margin: 0 24px 60px; padding: 60px 24px; }
+      .mobile-menu { padding: 24px; }
+      .testimonials-page-grid { padding: 48px 24px 60px; }
+      .media-grid { padding: 48px 24px 80px; }
+      .shop-grid { padding: 48px 24px 60px; }
+    }
+    @media (max-width: 480px) {
+      .hero-title { font-size: 34px; }
+      .hero-actions { flex-direction: column; }
+      .hero-actions a, .hero-btn-out { width: 100%; text-align: center; }
+      .cta-actions { flex-direction: column; align-items: center; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="watercolor-bg"></div>
-<div class="speckles"></div>
-
-<div class="page-content">
-
-  <!-- NAV -->
-  <nav class="ann-wrap">
-    <span class="ann-tag">GHL: Header / Nav element</span>
-    <div class="nav-logo">
-      <!-- Harmonic Egg logo mark (simplified) -->
-      <svg viewBox="0 0 32 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="16" cy="20" rx="13" ry="15" stroke="#1e3a4a" stroke-width="1.5"/>
-        <ellipse cx="16" cy="20" rx="8" ry="10" stroke="#1e3a4a" stroke-width="1"/>
-        <ellipse cx="16" cy="20" rx="3.5" ry="4.5" fill="#1e3a4a" opacity="0.7"/>
-        <path d="M16 5 C16 5 14 3 16 1 C18 3 16 5 16 5Z" fill="#1e3a4a"/>
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="showPage('home')">
+      <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="21" cy="24" rx="13" ry="16" stroke="#5FA4A1" stroke-width="1.5"/>
+        <ellipse cx="21" cy="24" rx="9" ry="11.5" stroke="#174F70" stroke-width="1.2" opacity="0.7"/>
+        <ellipse cx="21" cy="24" rx="5" ry="6.5" stroke="#042855" stroke-width="1" opacity="0.5"/>
+        <path d="M21 8 Q27 14 27 24" stroke="#5FA4A1" stroke-width="0.8" fill="none" opacity="0.4"/>
+        <path d="M21 8 Q15 14 15 24" stroke="#5FA4A1" stroke-width="0.8" fill="none" opacity="0.4"/>
       </svg>
-      <span class="nav-logo-text">Harmonic Egg</span>
+      <div class="nav-logo-text">Harmonic Egg&#174;<span>Wellness</span></div>
     </div>
     <ul class="nav-links">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Find a Guardian</a></li>
-      <li><a href="#">Store</a></li>
-      <li><a href="#">About</a></li>
+      <li><a href="#" onclick="showPage('about')">About</a></li>
+      <li><a href="#" onclick="showPage('science')">The Science</a></li>
+      <li><a href="#" onclick="showPage('sessions')">Sessions</a></li>
+      <li><a href="#" onclick="showPage('media')">Media</a></li>
+      <li><a href="#" onclick="showPage('testimonials')">Testimonials</a></li>
+      <li><a href="#" onclick="showPage('shop')" class="nav-cta">Shop</a></li>
     </ul>
-    <a href="#" class="nav-cart">Cart (0)</a>
-  </nav>
-
-  <!-- HERO -->
-  <div class="hero ann-wrap">
-    <span class="ann-tag">GHL: Image + Text section</span>
-    <p class="hero-eyebrow">Energy Healing Tools</p>
-    <h1>Healing Frequencies<br>for Body &amp; Soul</h1>
-    <p>Begin your experience.<br>Choose. Listen. Receive.<br>Let the sound support you.</p>
-  </div>
-
-  <!-- SECTION LABEL -->
-  <div class="section-header">
-    <h2>Shop All Products</h2>
-    <div class="section-divider"></div>
-  </div>
-
-  <!-- PRODUCT GRID -->
-  <div class="product-grid">
-
-    <!-- Product 1 -->
-    <div class="product-card ann-wrap">
-      <span class="ann-tag">GHL: Product element</span>
-      <div class="product-img-placeholder">
-        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-          <ellipse cx="32" cy="38" rx="22" ry="24" stroke="#3a7a6a" stroke-width="1.2" opacity="0.5"/>
-          <ellipse cx="32" cy="38" rx="14" ry="16" stroke="#3a7a6a" stroke-width="1" opacity="0.4"/>
-          <ellipse cx="32" cy="38" rx="6" ry="7" fill="#3a7a6a" opacity="0.25"/>
-          <path d="M32 14 C32 14 30 12 32 10 C34 12 32 14 32 14Z" fill="#3a7a6a" opacity="0.5"/>
-          <circle cx="20" cy="28" r="2" fill="#b4a0d0" opacity="0.4"/>
-          <circle cx="44" cy="24" r="1.5" fill="#a0c8c0" opacity="0.4"/>
-          <circle cx="38" cy="50" r="1.5" fill="#b4a0d0" opacity="0.35"/>
-        </svg>
-      </div>
-      <div class="product-info">
-        <p class="product-category">Digital Download</p>
-        <h3 class="product-name">Healing Frequencies Vol. 1</h3>
-        <p class="product-desc">High-fidelity .WAV audio frequencies curated for use inside or alongside the Harmonic Egg®.</p>
-        <div class="product-footer">
-          <span class="product-price">$49</span>
-          <button class="btn-add">Add to Cart</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Product 2 -->
-    <div class="product-card ann-wrap">
-      <span class="ann-tag">GHL: Product element</span>
-      <div class="product-img-placeholder">
-        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-          <rect x="16" y="10" width="32" height="42" rx="3" stroke="#3a7a6a" stroke-width="1.2" opacity="0.5"/>
-          <line x1="22" y1="22" x2="42" y2="22" stroke="#3a7a6a" stroke-width="1" opacity="0.35"/>
-          <line x1="22" y1="29" x2="42" y2="29" stroke="#3a7a6a" stroke-width="1" opacity="0.35"/>
-          <line x1="22" y1="36" x2="35" y2="36" stroke="#3a7a6a" stroke-width="1" opacity="0.35"/>
-          <circle cx="48" cy="20" r="2" fill="#a0c8c0" opacity="0.4"/>
-          <circle cx="15" cy="44" r="1.5" fill="#b4a0d0" opacity="0.35"/>
-        </svg>
-      </div>
-      <div class="product-info">
-        <p class="product-category">Book</p>
-        <h3 class="product-name">Unlocking the Ancient Secrets to Healing</h3>
-        <p class="product-desc">Gail Lynn's foundational guide to the science and spirit behind the Harmonic Egg® technology.</p>
-        <div class="product-footer">
-          <span class="product-price">$25</span>
-          <button class="btn-add">Add to Cart</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- TRUST BAR -->
-  <div class="trust-bar ann-wrap">
-    <span class="ann-tag">GHL: Icon List / Text columns</span>
-    <div class="trust-item">
-      <div class="trust-dot">
-        <svg viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg>
-      </div>
-      <p>No judgment, no fixing</p>
-    </div>
-    <div class="trust-item">
-      <div class="trust-dot">
-        <svg viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg>
-      </div>
-      <p>Ancient resonance for modern wellness</p>
-    </div>
-    <div class="trust-item">
-      <div class="trust-dot">
-        <svg viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg>
-      </div>
-      <p>Guardian-approved frequencies</p>
+    <div class="nav-hamburger" onclick="toggleMenu()" id="hamburger">
+      <span></span><span></span><span></span>
     </div>
   </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>© 2025 Harmonic Egg LLC — All Rights Reserved</p>
-  </footer>
-
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#" onclick="showPage('home');toggleMenu()">Home</a>
+  <a href="#" onclick="showPage('about');toggleMenu()">About</a>
+  <a href="#" onclick="showPage('science');toggleMenu()">The Science</a>
+  <a href="#" onclick="showPage('sessions');toggleMenu()">Sessions</a>
+  <a href="#" onclick="showPage('media');toggleMenu()">Media</a>
+  <a href="#" onclick="showPage('testimonials');toggleMenu()">Testimonials</a>
+  <a href="#" onclick="showPage('shop');toggleMenu()">Shop</a>
 </div>
+
+<!-- ========== HOME ========== -->
+<div class="page active" id="page-home">
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Sound &amp; Light Therapy</div>
+      <h1 class="hero-title">Restore Your Body's<br/><em>Natural Balance</em></h1>
+      <p class="hero-body">The Harmonic Egg&#174; is a patented, immersive energy therapy chamber using sound, light, frequency, and vibration — activating your body's innate ability to heal itself.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#" onclick="showPage('sessions')">Find a Session</a>
+        <a class="hero-btn-out" href="#" onclick="showPage('science')">The Science</a>
+      </div>
+    </div>
+    <div class="hero-scroll"><div class="hero-scroll-line"></div>Scroll</div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stats-grid">
+      <div class="stat-item"><div class="stat-num">20+</div><div class="stat-label">Years of Research</div></div>
+      <div class="stat-item"><div class="stat-num">100+</div><div class="stat-label">Certified Centers</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Therapy Modalities</div></div>
+      <div class="stat-item"><div class="stat-num">&#8734;</div><div class="stat-label">Lives Transformed</div></div>
+    </div>
+  </div>
+
+  <section class="what-is">
+    <div class="what-is-inner">
+      <div>
+        <svg viewBox="0 0 480 480" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">
+          <defs>
+            <radialGradient id="eggG" cx="40%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#5FA4A1" stop-opacity="0.2"/>
+              <stop offset="60%" stop-color="#174F70" stop-opacity="0.1"/>
+              <stop offset="100%" stop-color="#042855" stop-opacity="0.04"/>
+            </radialGradient>
+            <linearGradient id="strokeG" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#5FA4A1"/>
+              <stop offset="100%" stop-color="#174F70"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="240" cy="268" rx="186" ry="216" fill="url(#eggG)"/>
+          <ellipse cx="240" cy="268" rx="186" ry="216" stroke="url(#strokeG)" stroke-width="1.5"/>
+          <ellipse cx="240" cy="268" rx="148" ry="176" stroke="url(#strokeG)" stroke-width="1" stroke-opacity="0.5"/>
+          <ellipse cx="240" cy="268" rx="110" ry="134" stroke="url(#strokeG)" stroke-width="0.8" stroke-opacity="0.35"/>
+          <ellipse cx="240" cy="268" rx="72" ry="92" stroke="url(#strokeG)" stroke-width="0.8" stroke-opacity="0.2"/>
+          <ellipse cx="240" cy="268" rx="34" ry="50" stroke="#CB6CE6" stroke-width="0.8" stroke-opacity="0.25"/>
+          <path d="M54 268 Q240 160 426 268" stroke="#5FA4A1" stroke-width="1" stroke-opacity="0.25" fill="none" stroke-dasharray="5 10"/>
+          <path d="M54 268 Q240 376 426 268" stroke="#CB6CE6" stroke-width="0.8" stroke-opacity="0.18" fill="none" stroke-dasharray="5 10"/>
+          <circle cx="240" cy="268" r="7" fill="#5FA4A1" opacity="0.5"/>
+          <circle cx="240" cy="268" r="22" fill="none" stroke="#5FA4A1" stroke-width="0.8" opacity="0.25"/>
+        </svg>
+      </div>
+      <div>
+        <div class="section-label">What is the Harmonic Egg&#174;</div>
+        <h2 class="section-title">A Chamber Designed for Deep Cellular Reset</h2>
+        <p style="font-size:17px;color:#555;line-height:1.8;margin-bottom:20px;">Built on the principles of sacred geometry, the Harmonic Egg&#174; is an egg-shaped wooden chamber that envelops you in precisely calibrated sound frequencies and full-spectrum light therapy.</p>
+        <p style="font-size:15px;color:#666;line-height:1.8;margin-bottom:36px;">Unlike conventional medicine, this non-invasive modality works by stimulating the body's autonomic nervous system — allowing it to return to a state of balance, rest, and natural regeneration. Each session is a unique vibrational experience tailored to your energetic needs.</p>
+        <a class="btn-ghost" href="#" onclick="showPage('science')">Explore the Technology</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="max-width:1280px;margin:0 auto;"></div>
+
+  <section class="how-it-works">
+    <div class="container">
+      <div class="how-header">
+        <div class="section-label" style="color:rgba(95,164,161,0.8);">The Experience</div>
+        <h2 class="section-title">How a Session Works</h2>
+        <p class="section-subtitle">Three intentional steps, one transformative experience.</p>
+      </div>
+    </div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="step-num">01</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 22 22" fill="none" stroke="#fff" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+            <circle cx="11" cy="8" r="4"/><path d="M3 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+          </svg>
+        </div>
+        <div class="step-title">Intake &amp; Intention</div>
+        <p class="step-body">Your practitioner guides a brief intake to understand your needs and wellness goals. Together, you set a clear intention for the session ahead.</p>
+      </div>
+      <div class="how-step">
+        <div class="step-num">02</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 22 22" fill="none" stroke="#fff" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+            <ellipse cx="11" cy="14" rx="6" ry="7"/><ellipse cx="11" cy="14" rx="3" ry="4"/><line x1="11" y1="2" x2="11" y2="7"/>
+          </svg>
+        </div>
+        <div class="step-title">Immersive Session</div>
+        <p class="step-body">You recline comfortably inside the egg-shaped chamber as custom-selected sound frequencies and chromotherapy light wash over you for 50 minutes.</p>
+      </div>
+      <div class="how-step">
+        <div class="step-num">03</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 22 22" fill="none" stroke="#fff" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+            <path d="M12 2l2 6h6l-5 3.6 2 6-5-3.6-5 3.6 2-6-5-3.6h6z"/>
+          </svg>
+        </div>
+        <div class="step-title">Integration &amp; Rest</div>
+        <p class="step-body">After your session, quiet time is offered to integrate the experience. Drinking water, journaling, and gentle movement are encouraged.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="container">
+      <div class="testimonials-header">
+        <div class="section-label">Client Experiences</div>
+        <h2 class="section-title">Transformations in Their Own Words</h2>
+      </div>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-text">"After three sessions in the Harmonic Egg I slept through the night for the first time in two years. There are no words for what this experience does for the nervous system."</p>
+        <div class="testimonial-author"><div class="author-avatar">S</div><div><div class="author-name">Sarah M.</div><div class="author-loc">Denver, CO</div></div></div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">"I was deeply skeptical, but chronic pain I had carried for 11 years began to shift after my very first session. I keep coming back because the results speak for themselves."</p>
+        <div class="testimonial-author"><div class="author-avatar">J</div><div><div class="author-name">James T.</div><div class="author-loc">Scottsdale, AZ</div></div></div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">"The combination of light and music inside the egg created a meditative state I have never reached on my own. I came out feeling lighter, clearer, and more myself."</p>
+        <div class="testimonial-author"><div class="author-avatar">L</div><div><div class="author-name">Layla R.</div><div class="author-loc">Austin, TX</div></div></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:48px;">
+      <a class="btn-ghost" href="#" onclick="showPage('testimonials')">Read More Stories</a>
+    </div>
+  </section>
+
+  <section class="featured-products">
+    <div class="fp-header">
+      <div>
+        <div class="section-label">The Shop</div>
+        <h2 class="section-title" style="margin-bottom:0;">Digital Calmness, Delivered</h2>
+      </div>
+      <a class="btn-ghost" href="#" onclick="showPage('shop')">Browse All Products</a>
+    </div>
+    <div class="fp-grid">
+      <div class="product-card">
+        <div class="product-img"><div class="product-img-placeholder">&#128214;</div><div class="product-badge">Bestseller</div></div>
+        <div class="product-body"><div class="product-cat">Book</div><div class="product-name">Unlocking the Ancient Secrets to Healing</div><div class="product-price">$16.95</div><button class="product-add">Add to Cart</button></div>
+      </div>
+      <div class="product-card">
+        <div class="product-img" style="background:linear-gradient(135deg,rgba(140,82,255,0.1),rgba(203,108,230,0.12));"><div class="product-img-placeholder">&#127925;</div></div>
+        <div class="product-body"><div class="product-cat">Digital Download</div><div class="product-name">Healing Frequencies Vol. 1 — Music Collection</div><div class="product-price">$24.00</div><button class="product-add">Add to Cart</button></div>
+      </div>
+      <div class="product-card">
+        <div class="product-img" style="background:linear-gradient(135deg,rgba(4,40,85,0.08),rgba(95,164,161,0.12));"><div class="product-img-placeholder">&#128241;</div><div class="product-badge" style="background:var(--grad-deep);">App</div></div>
+        <div class="product-body"><div class="product-cat">App Subscription</div><div class="product-name">Harmonic Egg Wellness App — Annual Access</div><div class="product-price">$49.00/yr</div><button class="product-add">Add to Cart</button></div>
+      </div>
+      <div class="product-card">
+        <div class="product-img" style="background:linear-gradient(135deg,rgba(203,108,230,0.08),rgba(146,27,159,0.1));"><div class="product-img-placeholder">&#127911;</div></div>
+        <div class="product-body"><div class="product-cat">Digital Download</div><div class="product-name">Sleep Reset — Guided Audio Program</div><div class="product-price">$18.00</div><button class="product-add">Add to Cart</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="section-label">Begin Your Journey</div>
+    <h2 class="section-title">Ready to Reset Your Nervous System?</h2>
+    <p class="section-subtitle">Find a certified Harmonic Egg&#174; center near you and experience what deep cellular calm actually feels like.</p>
+    <div class="cta-actions">
+      <a class="btn-primary" href="#" onclick="showPage('sessions')">Find a Center</a>
+      <a class="btn-secondary" href="#" onclick="showPage('about')">Our Story</a>
+    </div>
+  </section>
+
+</div><!-- /home -->
+
+<!-- ========== ABOUT ========== -->
+<div class="page" id="page-about">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Our Story</div>
+    <h1 class="page-hero-title">Healing Is the Original Technology</h1>
+    <p class="page-hero-body">Harmonic Egg&#174; was founded on the conviction that the human body holds the intelligence to restore itself — when given the right environment.</p>
+  </div>
+
+  <section class="about-mission">
+    <div class="about-mission-inner">
+      <div class="mission-visual">&#129716;</div>
+      <div>
+        <div class="section-label">Our Mission</div>
+        <h2 class="section-title">To Restore Balance, Harmony, and Energy</h2>
+        <p style="font-size:16px;color:#555;line-height:1.8;margin-bottom:20px;">Through immersive sound and light therapy rooted in nature and sacred geometry, we partner with certified practitioners worldwide to offer a consistent, life-changing, self-evolving energy technology.</p>
+        <p style="font-size:16px;color:#555;line-height:1.8;margin-bottom:36px;">We are reliable and caring partners who provide support and connection to Harmonic Egg&#174; Guardians striving to improve the lives of their clients — serving as a genuine alternative to conventional medicine.</p>
+        <a class="btn-primary" href="#" onclick="showPage('science')">See the Science</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="values-section">
+    <div class="container" style="text-align:center;">
+      <div class="section-label" style="color:rgba(95,164,161,0.8);">What Guides Us</div>
+      <h2 class="section-title" style="color:var(--porcelain);margin-bottom:0;">Our Core Values</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card"><div class="value-icon"></div><div class="value-title">Love</div><p class="value-body">We believe love heals all. By setting love as our intention, we bring our non-invasive method to the world — passionate about helping all living beings, including adults, children, and pets.</p></div>
+      <div class="value-card"><div class="value-icon" style="background:var(--grad-sacred);"></div><div class="value-title">Integrity</div><p class="value-body">Trust is earned through a high level of service, guidance, and support. We operate with fairness and decency for our customers and colleagues alike.</p></div>
+      <div class="value-card"><div class="value-icon" style="background:var(--grad-deep);"></div><div class="value-title">Reliability</div><p class="value-body">We are approachable, hard working, cooperative, and truthful. We offer a consistent and repeatable modality to help others achieve the wellness they desire.</p></div>
+      <div class="value-card"><div class="value-icon" style="background:linear-gradient(135deg,#5FA4A1,#CB6CE6);"></div><div class="value-title">Community</div><p class="value-body">Our success depends on consistent support. We assist approved centers with marketing, training, and virtual Guardian meetings — building an extended family of wellness.</p></div>
+    </div>
+  </section>
+
+  <section class="founder-section">
+    <div class="founder-inner">
+      <div class="founder-img">&#128100;</div>
+      <div>
+        <div class="founder-name">Gail Lynn</div>
+        <div class="founder-title-text">Founder &amp; Inventor, Harmonic Egg&#174;</div>
+        <div class="founder-bio">
+          <p>Gail Lynn is the inventor of the Harmonic Egg&#174; and author of <em>Unlocking the Ancient Secrets to Healing</em>. After her own profound healing journey, Gail dedicated herself to understanding the intersection of ancient wisdom, sacred geometry, and modern energy medicine.</p>
+          <p>Drawing on over two decades of research into sound, light, and vibrational frequency therapy, she created the Harmonic Egg&#174; — a patented resonance chamber that brings together the healing power of nature, geometry, and intention into one transformative experience.</p>
+          <p>Gail's work has been featured in media worldwide, and she travels internationally to spread awareness about non-invasive energy healing as a viable complement to conventional medicine.</p>
+        </div>
+        <div class="founder-quote"><p>"The body knows how to heal. Our job is simply to create the conditions for that healing to happen."</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section" style="background:var(--grad-celestial);">
+    <div class="section-label" style="color:rgba(251,250,249,0.6);">Experience It</div>
+    <h2 class="section-title">Find a Certified Center Near You</h2>
+    <p class="section-subtitle">Over 100 certified Harmonic Egg&#174; locations worldwide are ready to welcome you.</p>
+    <div class="cta-actions">
+      <a class="btn-primary" href="#" onclick="showPage('sessions')" style="background:var(--ds-navy);">Find a Center</a>
+      <a class="btn-secondary" href="#" onclick="showPage('shop')">Visit the Shop</a>
+    </div>
+  </section>
+</div><!-- /about -->
+
+<!-- ========== SCIENCE ========== -->
+<div class="page" id="page-science">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">The Technology</div>
+    <h1 class="page-hero-title">Where Ancient Wisdom Meets Modern Science</h1>
+    <p class="page-hero-body">The Harmonic Egg&#174; is a convergence of sacred geometry, acoustic physics, chromotherapy, and frequency medicine — all within one patented chamber.</p>
+  </div>
+
+  <section class="science-intro">
+    <div class="science-intro-inner">
+      <div class="section-label">The Foundation</div>
+      <h2 class="section-title">Built on Timeless Principles</h2>
+      <p class="section-subtitle" style="max-width:100%;margin:0 auto;">Every element of the Harmonic Egg&#174; — from the golden ratio proportions of the chamber to the curated frequencies of the sound library — has been designed with deep intentionality. This is not wellness theater. This is applied science rooted in decades of research.</p>
+    </div>
+  </section>
+
+  <div class="pillars-grid">
+    <div class="pillar-card">
+      <div class="pillar-num">01</div>
+      <div class="pillar-title">Sacred Geometry</div>
+      <p class="pillar-body">The chamber is built using the golden ratio — the same proportional system found in natural structures from nautilus shells to the human body. This geometry creates a resonance field that amplifies the therapeutic effect of sound and light delivered inside it.</p>
+    </div>
+    <div class="pillar-card" style="background:rgba(95,164,161,0.03);">
+      <div class="pillar-num">02</div>
+      <div class="pillar-title">Sound Frequency Therapy</div>
+      <p class="pillar-body">Specific audio frequencies are selected to match the body's natural resonance states. From Solfeggio frequencies to binaural beats, sound therapy stimulates the vagus nerve, reduces cortisol, and promotes parasympathetic nervous system activation.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-num">03</div>
+      <div class="pillar-title">Chromotherapy (Light)</div>
+      <p class="pillar-body">Visible light frequencies have measurable biological effects. Each color wavelength corresponds to specific energetic centers in the body. Full-spectrum chromotherapy inside the egg works synergistically with sound for deeper cellular impact.</p>
+    </div>
+    <div class="pillar-card" style="background:rgba(95,164,161,0.03);">
+      <div class="pillar-num">04</div>
+      <div class="pillar-title">Nervous System Reset</div>
+      <p class="pillar-body">Chronic stress, trauma, and environmental toxins lock the nervous system in fight-or-flight. The Harmonic Egg&#174; creates ideal conditions for the ANS to shift into parasympathetic dominance — rest, repair, and deep restoration.</p>
+    </div>
+  </div>
+
+  <section class="science-geometry">
+    <div class="container">
+      <div class="section-label" style="color:rgba(95,164,161,0.8);">Design Philosophy</div>
+      <h2 class="section-title">The Geometry of Healing</h2>
+      <p class="section-subtitle">The egg form is among the most structurally sound shapes in nature — reflecting potential, protection, and the beginning of transformation.</p>
+      <div class="geometry-visual">
+        <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" width="300" height="300">
+          <ellipse cx="150" cy="168" rx="98" ry="118" stroke="#5FA4A1" stroke-width="1.5" stroke-opacity="0.55"/>
+          <ellipse cx="150" cy="168" rx="76" ry="93" stroke="#174F70" stroke-width="1" stroke-opacity="0.45"/>
+          <ellipse cx="150" cy="168" rx="54" ry="68" stroke="#5FA4A1" stroke-width="0.8" stroke-opacity="0.35"/>
+          <ellipse cx="150" cy="168" rx="32" ry="43" stroke="#CB6CE6" stroke-width="0.8" stroke-opacity="0.3"/>
+          <ellipse cx="150" cy="168" rx="12" ry="18" fill="rgba(95,164,161,0.15)" stroke="#5FA4A1" stroke-width="1"/>
+          <line x1="52" y1="168" x2="248" y2="168" stroke="#5FA4A1" stroke-width="0.5" stroke-opacity="0.25"/>
+          <line x1="150" y1="50" x2="150" y2="286" stroke="#5FA4A1" stroke-width="0.5" stroke-opacity="0.25"/>
+          <circle cx="150" cy="168" r="4" fill="#5FA4A1"/>
+        </svg>
+      </div>
+      <a class="btn-primary" href="#" onclick="showPage('sessions')" style="display:inline-block;">Experience It Yourself</a>
+    </div>
+  </section>
+</div><!-- /science -->
+
+<!-- ========== SESSIONS ========== -->
+<div class="page" id="page-sessions">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Sessions &amp; Centers</div>
+    <h1 class="page-hero-title">Your Healing Journey Begins Here</h1>
+    <p class="page-hero-body">Choose a session type, find a certified center, and take the first step toward restored balance and energetic vitality.</p>
+  </div>
+
+  <section style="padding:100px 0 64px;">
+    <div class="container" style="text-align:center;max-width:680px;">
+      <div class="section-label">Session Types</div>
+      <h2 class="section-title">What to Expect</h2>
+      <p class="section-subtitle" style="max-width:100%;">Every session is unique. Your practitioner selects sound and light programs based on your energy, intention, and wellness goals on that day.</p>
+    </div>
+  </section>
+
+  <div class="sessions-grid" style="margin-bottom:100px;">
+    <div class="session-card">
+      <div class="session-name">Introductory Session</div>
+      <div class="session-duration">&#9201; 50 Minutes</div>
+      <p class="session-desc">Your first experience inside the Harmonic Egg&#174;. Your practitioner will guide the intake process, select an appropriate opening frequency program, and support your integration afterward.</p>
+      <a class="btn-ghost" href="#">Book Now</a>
+    </div>
+    <div class="session-card featured">
+      <div class="session-badge">Most Popular</div>
+      <div class="session-name">Restorative Series</div>
+      <div class="session-duration">&#9201; 3–6 Sessions</div>
+      <p class="session-desc">A curated series of sessions spaced 1–2 weeks apart, allowing the body to integrate between visits. The practitioner tracks your energetic shifts and adjusts frequencies throughout the series.</p>
+      <a class="btn-ghost" href="#">Learn More</a>
+    </div>
+    <div class="session-card">
+      <div class="session-name">Animal Sessions</div>
+      <div class="session-duration">&#9201; 30–50 Minutes</div>
+      <p class="session-desc">The Harmonic Egg&#174; is equally effective for pets and animals. Sessions are adapted in duration and frequency to support the unique physiology of each animal companion.</p>
+      <a class="btn-ghost" href="#">Learn More</a>
+    </div>
+  </div>
+
+  <section class="find-center">
+    <div class="container">
+      <div class="find-header">
+        <div>
+          <div class="section-label">Locations</div>
+          <h2 class="section-title" style="margin-bottom:0;">Find a Center Near You</h2>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <input class="form-input" placeholder="Enter city, state, or zip..." style="width:280px;max-width:100%;"/>
+          <button class="btn-primary">Search</button>
+        </div>
+      </div>
+      <div class="center-map-placeholder">Map — Certified Center Locator (GHL / Google Maps Integration)</div>
+      <div style="margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" id="centers-grid">
+        <div style="padding:24px;border:1px solid var(--stone);background:#fff;"><div style="font-weight:700;color:var(--ds-navy);margin-bottom:4px;">Serenity Wellness Collective</div><div style="font-size:13px;color:#888;">Denver, CO</div></div>
+        <div style="padding:24px;border:1px solid var(--stone);background:#fff;"><div style="font-weight:700;color:var(--ds-navy);margin-bottom:4px;">Sacred Frequency Center</div><div style="font-size:13px;color:#888;">Austin, TX</div></div>
+        <div style="padding:24px;border:1px solid var(--stone);background:#fff;"><div style="font-weight:700;color:var(--ds-navy);margin-bottom:4px;">Harmonic Healing Arts</div><div style="font-size:13px;color:#888;">Scottsdale, AZ</div></div>
+      </div>
+    </div>
+  </section>
+</div><!-- /sessions -->
+
+<!-- ========== SHOP ========== -->
+<div class="page" id="page-shop">
+  <div class="page-hero" style="padding-bottom:64px;">
+    <div class="page-hero-eyebrow">The Shop</div>
+    <h1 class="page-hero-title">Digital Calmness, At Your Fingertips</h1>
+    <p class="page-hero-body">Sound therapy music, wellness apps, books, and curated healing tools — everything you need to reset your nervous system and reclaim your quality of life.</p>
+  </div>
+
+  <div class="shop-filters">
+    <div class="shop-filters-inner">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-btn active" onclick="setFilter(this)">All Products</button>
+      <button class="filter-btn" onclick="setFilter(this)">Digital Downloads</button>
+      <button class="filter-btn" onclick="setFilter(this)">Apps &amp; Subscriptions</button>
+      <button class="filter-btn" onclick="setFilter(this)">Books</button>
+      <button class="filter-btn" onclick="setFilter(this)">Physical Products</button>
+    </div>
+  </div>
+
+  <div class="shop-grid">
+    <div class="product-card"><div class="product-img"><div class="product-img-placeholder">&#128214;</div><div class="product-badge">Bestseller</div></div><div class="product-body"><div class="product-cat">Book</div><div class="product-name">Unlocking the Ancient Secrets to Healing</div><div class="product-price">$16.95</div><button class="product-add">Add to Cart</button></div></div>
+    <div class="product-card"><div class="product-img" style="background:linear-gradient(135deg,rgba(4,40,85,0.1),rgba(95,164,161,0.15));"><div class="product-img-placeholder">&#128241;</div><div class="product-badge" style="background:var(--grad-deep);">App</div></div><div class="product-body"><div class="product-cat">App Subscription</div><div class="product-name">Harmonic Egg Wellness App — Annual Access</div><div class="product-price">$49.00/yr</div><button class="product-add">Add to Cart</button></div></div>
+    <div class="product-card"><div class="product-img" style="background:linear-gradient(135deg,rgba(140,82,255,0.1),rgba(203,108,230,0.12));"><div class="product-img-placeholder">&#127925;</div></div><div class="product-body"><div class="product-cat">Digital Download</div><div class="product-name">Healing Frequencies Vol. 1 — Music Collection</div><div class="product-price">$24.00</div><button class="product-add">Add to Cart</button></div></div>
+    <div class="product-card"><div class="product-img" style="background:linear-gradient(135deg,rgba(203,108,230,0.08),rgba(146,27,159,0.1));"><div class="product-img-placeholder">&#127911;</div></div><div class="product-body"><div class="product-cat">Digital Download</div><div class="product-name">Sleep Reset — Guided Audio Program</div><div class="product-price">$18.00</div><button class="product-add">Add to Cart</button></div></div>
+    <div class="product-card"><div class="product-img" style="background:linear-gradient(135deg,rgba(95,164,161,0.1),rgba(23,79,112,0.1));"><div class="product-img-placeholder">&#129497;</div></div><div class="product-body"><div class="product-cat">Digital Download</div><div class="product-name">Anxiety Release — Binaural Frequency Pack</div><div class="product-price">$21.00</div><button class="product-add">Add to Cart</button></div></div>
+    <div class="product-card"><div class="product-img" style="background:linear-gradient(135deg,rgba(215,208,197,0.3),rgba(95,164,161,0.1));"><div class="product-img-placeholder">&#128329;</div></div><div class="product-body"><div class="product-cat">Physical Product</div><div class="product-name">Harmonic Wellness Candle — Cedarwood &amp; Sage</div><div class="product-price">$32.00</div><button class="product-add">Add to Cart</button></div></div>
+  </div>
+
+  <div class="wholesale-gate">
+    <div class="wholesale-lock">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+    </div>
+    <div class="section-label" style="color:var(--ds-violet);">Guardian Access Only</div>
+    <h2 class="section-title">Wholesale Products</h2>
+    <p class="section-subtitle">Exclusive wholesale pricing and products are available to certified Harmonic Egg&#174; Guardians. Please log in with your Guardian credentials to access this section (14 wholesale products available).</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:36px;">
+      <a class="btn-primary" href="#" style="background:var(--grad-deep);">Guardian Login</a>
+      <a class="btn-secondary" href="#">What is a Guardian?</a>
+    </div>
+  </div>
+</div><!-- /shop -->
+
+<!-- ========== TESTIMONIALS ========== -->
+<div class="page" id="page-testimonials">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Client Stories</div>
+    <h1 class="page-hero-title">Transformations in Their Own Words</h1>
+    <p class="page-hero-body">Real experiences from real people — finding rest, relief, and restoration through the Harmonic Egg&#174;.</p>
+  </div>
+
+  <div class="testimonials-page-grid">
+    <div class="testimonial-page-card"><p class="testimonial-text" style="padding-top:52px;">"After three sessions in the Harmonic Egg I slept through the night for the first time in two years. There are no words for what this experience does for the nervous system."</p><div class="testimonial-author" style="margin-top:28px;"><div class="author-avatar">S</div><div><div class="author-name">Sarah M.</div><div class="author-loc">Denver, CO</div></div></div></div>
+    <div class="testimonial-page-card"><p class="testimonial-text" style="padding-top:52px;">"I was deeply skeptical, but chronic pain I had carried for 11 years began to shift after my very first session. I keep coming back because the results speak for themselves."</p><div class="testimonial-author" style="margin-top:28px;"><div class="author-avatar">J</div><div><div class="author-name">James T.</div><div class="author-loc">Scottsdale, AZ</div></div></div></div>
+    <div class="testimonial-page-card"><p class="testimonial-text" style="padding-top:52px;">"The combination of light and music inside the egg created a meditative state I have never reached on my own. I came out feeling lighter, clearer, and more myself."</p><div class="testimonial-author" style="margin-top:28px;"><div class="author-avatar">L</div><div><div class="author-name">Layla R.</div><div class="author-loc">Austin, TX</div></div></div></div>
+    <div class="testimonial-page-card"><p class="testimonial-text" style="padding-top:52px;">"My dog had severe anxiety after an accident. After two sessions in the Harmonic Egg, he is a completely different animal — calm, playful, and present again. I am so grateful."</p><div class="testimonial-author" style="margin-top:28px;"><div class="author-avatar">M</div><div><div class="author-name">Maya K.</div><div class="author-loc">Portland, OR</div></div></div></div>
+    <div class="testimonial-page-card"><p class="testimonial-text" style="padding-top:52px;">"As a trauma therapist, I am always looking for adjunct healing modalities for my clients. The Harmonic Egg has become one of my most recommended tools for somatic integration."</p><div class="testimonial-author" style="margin-top:28px;"><div class="author-avatar">D</div><div><div class="author-name">Dr. Dana V.</div><div class="author-loc">Boulder, CO</div></div></div></div>
+    <div class="testimonial-page-card"><p class="testimonial-text" style="padding-top:52px;">"I went into my first session not knowing what to expect. I came out in tears — not from sadness, but from the deepest sense of peace I have ever felt in my body. Extraordinary."</p><div class="testimonial-author" style="margin-top:28px;"><div class="author-avatar">R</div><div><div class="author-name">Rachel P.</div><div class="author-loc">Nashville, TN</div></div></div></div>
+  </div>
+
+  <div style="background:rgba(95,164,161,0.05);border-top:1px solid rgba(95,164,161,0.15);padding:80px 40px;">
+    <div style="max-width:640px;margin:0 auto;text-align:center;">
+      <div class="section-label">Share Your Story</div>
+      <h2 class="section-title">Have You Experienced the Harmonic Egg&#174;?</h2>
+      <p class="section-subtitle" style="margin:0 auto 40px;">We'd love to hear about your session. Submit your testimonial below — your story may inspire someone else on their healing journey.</p>
+      <div class="form-group"><label class="form-label">Your Name</label><input class="form-input" placeholder="Jane Doe"/></div>
+      <div class="form-group"><label class="form-label">Location</label><input class="form-input" placeholder="City, State"/></div>
+      <div class="form-group"><label class="form-label">Center Visited (optional)</label><input class="form-input" placeholder="Center name"/></div>
+      <div class="form-group"><label class="form-label">Your Experience</label><textarea class="form-textarea" placeholder="Tell us about your session..."></textarea></div>
+      <button class="btn-primary" style="width:100%;">Submit Your Testimonial</button>
+      <p style="font-size:12px;color:#aaa;margin-top:12px;">Testimonials are reviewed before publishing. By submitting, you consent to your story being shared on harmonicegg.com.</p>
+    </div>
+    <p style="text-align:center;margin-top:48px;font-size:12px;color:#bbb;border-top:1px solid var(--stone);padding-top:24px;max-width:700px;margin-left:auto;margin-right:auto;">&#128204; GHL Build Note: This testimonial form connects to a GHL form workflow with email notification and a moderation queue — consolidating the existing off-site testimonial portal directly into the main GHL site. Guardian-submitted testimonials can be toggled visible/hidden from the GHL backend.</p>
+  </div>
+</div><!-- /testimonials -->
+
+<!-- ========== MEDIA ========== -->
+<div class="page" id="page-media">
+  <div class="page-hero">
+    <div class="page-hero-eyebrow">Press &amp; Media</div>
+    <h1 class="page-hero-title">Harmonic Egg&#174; In the World</h1>
+    <p class="page-hero-body">Interviews, podcasts, features, and documentary coverage of Gail Lynn and the Harmonic Egg&#174; healing technology.</p>
+  </div>
+  <div class="media-grid">
+    <div class="media-card"><div class="media-thumb"><div class="media-play">&#9658;</div><div class="media-type-badge">Podcast</div></div><div class="media-info"><div class="media-source">The Wellness Frequency Podcast</div><div class="media-title">Gail Lynn on Sacred Geometry and Sound Healing</div><div class="media-date">March 2024</div></div></div>
+    <div class="media-card"><div class="media-thumb" style="background:linear-gradient(135deg,rgba(140,82,255,0.5),rgba(146,27,159,0.6));"><div class="media-play">&#9658;</div><div class="media-type-badge">Documentary</div></div><div class="media-info"><div class="media-source">Gaia TV Feature</div><div class="media-title">Unlocking Healing — The Harmonic Egg Story</div><div class="media-date">January 2024</div></div></div>
+    <div class="media-card"><div class="media-thumb" style="background:linear-gradient(135deg,rgba(23,79,112,0.7),rgba(4,40,85,0.85));"><div class="media-play">&#9658;</div><div class="media-type-badge">Interview</div></div><div class="media-info"><div class="media-source">Integrative Medicine Today</div><div class="media-title">The Science of Vibrational Resonance Chambers</div><div class="media-date">November 2023</div></div></div>
+    <div class="media-card"><div class="media-thumb" style="background:linear-gradient(135deg,rgba(95,164,161,0.5),rgba(23,79,112,0.6));"><div class="media-play">&#9658;</div><div class="media-type-badge">Podcast</div></div><div class="media-info"><div class="media-source">Biohacker's Lab</div><div class="media-title">Sound, Light, and the Autonomic Nervous System</div><div class="media-date">September 2023</div></div></div>
+    <div class="media-card"><div class="media-thumb" style="background:linear-gradient(135deg,rgba(203,108,230,0.4),rgba(95,164,161,0.4));"><div class="media-play">&#9658;</div><div class="media-type-badge">Article</div></div><div class="media-info"><div class="media-source">Forbes Health</div><div class="media-title">Energy Healing's Next Frontier: Inside the Harmonic Egg</div><div class="media-date">July 2023</div></div></div>
+    <div class="media-card"><div class="media-thumb" style="background:linear-gradient(135deg,rgba(4,40,85,0.7),rgba(140,82,255,0.4));"><div class="media-play">&#9658;</div><div class="media-type-badge">Podcast</div></div><div class="media-info"><div class="media-source">Ancient Meets Modern</div><div class="media-title">Gail Lynn: Inventor, Healer, Visionary</div><div class="media-date">April 2023</div></div></div>
+  </div>
+</div><!-- /media -->
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="nav-logo" onclick="showPage('home')" style="cursor:pointer;">
+          <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
+            <ellipse cx="21" cy="24" rx="13" ry="16" stroke="#5FA4A1" stroke-width="1.5"/>
+            <ellipse cx="21" cy="24" rx="9" ry="11.5" stroke="#174F70" stroke-width="1.2" opacity="0.7"/>
+            <ellipse cx="21" cy="24" rx="5" ry="6.5" stroke="#042855" stroke-width="1" opacity="0.5"/>
+          </svg>
+          <div class="nav-logo-text" style="color:#fff;">Harmonic Egg&#174;<span>Wellness</span></div>
+        </div>
+        <p class="footer-brand-text">Restoring balance, harmony, and energy through immersive sound and light therapy rooted in nature and sacred geometry.</p>
+        <div class="footer-social">
+          <a href="#" title="Facebook">f</a>
+          <a href="#" title="Instagram">in</a>
+          <a href="#" title="YouTube">&#9654;</a>
+          <a href="#" title="LinkedIn">li</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#" onclick="showPage('about')">About Us</a></li>
+          <li><a href="#" onclick="showPage('science')">The Science</a></li>
+          <li><a href="#" onclick="showPage('sessions')">Sessions</a></li>
+          <li><a href="#" onclick="showPage('sessions')">Find a Center</a></li>
+          <li><a href="#" onclick="showPage('media')">Media</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#" onclick="showPage('shop')">All Products</a></li>
+          <li><a href="#" onclick="showPage('shop')">Books</a></li>
+          <li><a href="#" onclick="showPage('shop')">Music Downloads</a></li>
+          <li><a href="#" onclick="showPage('shop')">Wellness App</a></li>
+          <li><a href="#" onclick="showPage('shop')">Guardian Login</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#" onclick="showPage('testimonials')">Share Your Story</a></li>
+          <li><a href="#">Newsletter</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&#169; 2025 Harmonic Egg&#174; Wellness. All rights reserved. Harmonic Egg&#174; is a registered trademark.</span>
+      <span>Mockup by <a href="#">Your Agency</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+    var el = document.getElementById('page-' + id);
+    if (el) { el.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  }
+  function toggleMenu() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  }
+  function setFilter(btn) {
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+  document.addEventListener('click', function(e) {
+    var menu = document.getElementById('mobile-menu');
+    var hb = document.getElementById('hamburger');
+    if (menu.classList.contains('open') && !menu.contains(e.target) && !hb.contains(e.target)) {
+      menu.classList.remove('open');
+    }
+  });
+  window.addEventListener('scroll', function() {
+    document.getElementById('main-nav').style.boxShadow = window.scrollY > 20 ? '0 2px 24px rgba(4,40,85,0.08)' : 'none';
+  });
+</script>
 </body>
 </html>
